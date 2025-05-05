@@ -1,0 +1,28 @@
+version: '3.8'
+
+services:
+  redis:
+    image: redis:7                     # Official Redis image, version 7
+    container_name: redis              # Name the container "redis"
+    ports:
+      - "6379:6379"                    # Expose Redis on port 6379
+    networks:
+      - redis-net                      # Attach to the same network as the Agent
+
+  datadog-agent:
+    image: datadog/agent:7             # Datadog Agent version 7
+    container_name: datadog-agent      # Name the container "datadog-agent"
+    environment:
+      - DD_API_KEY=${DD_API_KEY}       # Datadog API key (from .env)
+      - DD_SITE=${DD_SITE:-datadoghq.com}  # Site to send data to (default to US site)
+      - DD_TAGS=env:redis_sandbox service:redis-integration  # Additional tags
+      - DD_LOG_LEVEL=INFO              # Agent log level for debugging
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro  # Optional: for container tagging
+      - ./conf.d/redisdb.d:/etc/datadog-agent/conf.d/redisdb.d:ro  # Mount Redis config
+    networks:
+      - redis-net                      # Connect to Redis container via this bridge network
+
+networks:
+  redis-net:
+    driver: bridge                     # Standard Docker bridge network

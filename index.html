@@ -1,0 +1,132 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Vince Allen – Portfolio</title>
+  <style>
+    :root {
+      --bg: #121417;
+      --primary: #f4f4f4;
+      --accent: #7dd3fc;
+      --card-bg: #1f252d;
+      --radius: 12px;
+      --shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    }
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: var(--bg);
+      color: var(--primary);
+      line-height: 1.6;
+    }
+    header {
+      padding: 2rem 1rem;
+      text-align: center;
+    }
+    header h1 {
+      margin: 0;
+      font-size: 2.5rem;
+    }
+    header p {
+      max-width: 600px;
+      margin: 0.5rem auto 0;
+      font-size: 1.05rem;
+      color: #a0aec0;
+    }
+    .container {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 1rem;
+    }
+    .project {
+      background: var(--card-bg);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 1.5rem;
+      margin-bottom: 2rem;
+      transition: transform 0.2s ease;
+    }
+    .project:hover {
+      transform: translateY(-4px);
+    }
+    .project h2 {
+      margin-top: 0;
+      color: var(--accent);
+    }
+    .project img {
+      max-width: 100%;
+      border-radius: var(--radius);
+      margin-top: 1rem;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+    }
+    .button {
+      display: inline-block;
+      margin-top: 1rem;
+      padding: 0.6rem 1rem;
+      background-color: var(--accent);
+      color: #1f252d;
+      border-radius: 6px;
+      text-decoration: none;
+      font-weight: 500;
+    }
+    footer {
+      text-align: center;
+      padding: 2rem 1rem;
+      color: #a0aec0;
+      font-size: 0.9rem;
+    }
+    footer a {
+      color: var(--accent);
+      text-decoration: none;
+      margin: 0 0.5rem;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Vincent Allen Jr</h1>
+    <p>A portfolio of technical projects focused on automation, observability, intelligent systems, and applied AI.</p>
+  </header>
+
+  <main class="container">
+    <section class="project">
+      <h2>1. Lodi – Your Personal Moving Assistant (Logistical Digital Assistant)</h2>
+      <p>
+        Lodi is a lightweight AI Agent built to help with long distance move planning. It uses ChatGPT to guide each task, SerpAPI to search for moving companies in real time, and the Google Sheets API to save results to the cloud. Lodi finds contact info like phone numbers and emails from mover websites, helping you stay organized while automating the research.
+      </p>
+      <img src="assets/lodi_demo.gif" alt="Lodi demo GIF"/>
+      <a class="button" href="projects/lodi/README.md" target="_blank">View README</a>
+    </section>
+
+    <section class="project">
+      <h2>2. Dosage Optimization via Monte Carlo Search</h2>
+      <p>
+        This project simulates how to find the best medical dosage when testing is limited and results can vary. It uses a Monte Carlo style approach with adaptive ternary search: testing several options each round, averaging noisy results, and focusing in on the best performing range. This mirrors real world problems like figuring out the right medication dose when trials are few and outcomes aren’t perfectly reliable.
+      </p>
+      <img src="assets/optimaldosage.png" alt="Dosage optimization chart"/>
+      <a class="button" href="projects/dosage-optimizer/README.md" target="_blank">View README</a>
+    </section>
+
+    <section class="project">
+      <h2>3. Redis Integration Sandbox with Datadog</h2>
+      <p>
+        A self contained Docker environment to explore how Datadog collects Redis metrics using its Agent integration. Includes scripts to generate synthetic Redis traffic—like key writes, expirations, and counter increments—and validate visibility for metrics like <code>redis.mem.used</code>, <code>redis.net.commands</code>, and <code>redis.stats.keyspace_hits</code> in the Metrics Explorer.
+      </p>
+      <img src="assets/redis_mem_used.jpg" alt="Redis metric example in Datadog UI"/>
+      <a class="button" href="projects/redis_sandbox/README.md" target="_blank">View README</a>
+    </section>
+  </main>
+
+  <footer>
+    <div class="footer-content">
+      <p>
+        Built by Vincent Allen Jr —
+        <a href="mailto:vallenjr11@gmail.com">Email</a> •
+        <a href="https://www.linkedin.com/in/vincent-allen-jr/" target="_blank">LinkedIn</a>
+      </p>
+    </div>
+  </footer>
+</body>
+</html>
