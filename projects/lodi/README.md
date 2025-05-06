@@ -4,6 +4,8 @@
 ![Python](https://img.shields.io/badge/python-3.9+-blue)
 ![Status](https://img.shields.io/badge/status-active-brightgreen)
 ![SerpAPI](https://img.shields.io/badge/API-SerpAPI-blue)
+![OpenAI](https://img.shields.io/badge/AI-OpenAI-success)
+
 
 Lodi is a task based CLI assistant that helps automate long distance move planning. It uses live search, contact scraping, Google Sheets integration, and GPT support to simplify relocation logistics.
 

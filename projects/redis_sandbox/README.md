@@ -1,6 +1,12 @@
 
 # Redis Integration Sandbox with Datadog 🧪
 
+![Docker](https://img.shields.io/badge/docker-compose-blue)
+![Status](https://img.shields.io/badge/status-active-brightgreen)
+![Datadog](https://img.shields.io/badge/integration-datadog-red)
+![Redis](https://img.shields.io/badge/database-redis-orange)
+
+
 This project provides a lightweight sandbox for exploring and validating the [Redis integration](https://docs.datadoghq.com/integrations/redisdb/) with the Datadog Agent in a containerized environment.
 
 ---

@@ -1,6 +1,11 @@
 
 # Dosage Optimization via Monte Carlo Ternary Search 💊
 
+![Python](https://img.shields.io/badge/python-3.9+-blue)
+![Status](https://img.shields.io/badge/status-experimental-yellow)
+![Algorithm](https://img.shields.io/badge/method-MonteCarloSearch-orange)
+
+
 This project implements a Python based optimization algorithm for finding the optimal dosage in scenarios where feedback is noisy and evaluation opportunities are limited. It combines Monte Carlo style averaging with a ternary search inspired interval reduction strategy.
 
 ---
