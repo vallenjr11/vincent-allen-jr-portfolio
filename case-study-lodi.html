@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Case Study: Evolving Lodi with Quantum Architecture</title>
+  <style>
+    body {
+      background-color: #121417;
+      color: #f4f4f4;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      max-width: 960px;
+      margin: 2rem auto;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    h1, h2, h3 {
+      color: #7dd3fc;
+    }
+    a {
+      color: #7dd3fc;
+      text-decoration: none;
+    }
+    a:hover {
+      text-decoration: underline;
+    }
+    img {
+      max-width: 100%;
+      border-radius: 8px;
+      margin: 1rem 0;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+    }
+    table {
+      border-collapse: collapse;
+      width: 100%;
+      margin: 1rem 0;
+    }
+    table, th, td {
+      border: 1px solid #444;
+    }
+    th, td {
+      padding: 0.5rem;
+      text-align: left;
+    }
+    th {
+      background-color: #1f252d;
+    }
+  </style>
+</head>
+<body>
+
+  <a href="index.html" class="back-link">← Back to Portfolio</a>
+
+  <h1>Case Study: Evolving Lodi with Quantum Architecture</h1>
+  <h3>A design reflection on scaling an AI-powered assistant from script to modular system</h3>
+
+  <h2>Introduction</h2>
+  <p>
+    Lodi (short for Logistical Digital Assistant) started as a lightweight AI-powered tool to help plan long-distance moves. It combined ChatGPT for task guidance, SerpAPI to search for moving companies, and the Google Sheets API to save contact details in the cloud.
+  </p>
+  <p>
+    This case study explores that evolution through the lens of <em>quantum architecture</em> — the idea that every software system has a “smallest deployable unit,” or quantum (<em>plural: quanta</em>). Inspired by <em>Software Architecture: The Hard Parts</em>, I wanted to see how shifting those boundaries impacts deployability, scalability, and failure isolation.
+  </p>
+
+  <h2>Starting Point: A Simple Script</h2>
+  <p>
+    The original version of Lodi was a monolithic Python script. Everything happened in order:
+  </p>
+  <ul>
+    <li>Use ChatGPT to prompt and guide the user</li>
+    <li>Call SerpAPI to search for movers</li>
+    <li>Scrape phone numbers and emails inline</li>
+    <li>Write results directly to Google Sheets</li>
+    <li>Log progress in the same process</li>
+  </ul>
+
+  <p>
+    In this setup, the entire app was a <strong>single quantum</strong>: the smallest thing I could deploy or run was the entire script.
+  </p>
+
+  <img src="assets/lodi_initial_architecture.png" alt="Initial monolithic architecture diagram (placeholder)">
+
+  <h3>Why it worked (for a while):</h3>
+  <ul>
+    <li>✅ Easy to build and deploy</li>
+    <li>✅ Minimal operational complexity</li>
+  </ul>
+
+  <h3>But it had limits:</h3>
+  <ul>
+    <li>⚠️ Any failure stopped the whole app</li>
+    <li>⚠️ Couldn’t update or test parts independently</li>
+    <li>⚠️ Hard to scale or add new features cleanly</li>
+  </ul>
+
+  <h2>Why Refactor?</h2>
+  <p>
+    While the monolithic script worked for early experiments, I started thinking ahead: What happens if I want to add more features? Each new capability added complexity inside the same process, increasing the chance that a failure in one part could break everything.
+  </p>
+  <p>
+    I realized splitting Lodi into separate services could make it easier to debug, scale, and iterate without bringing down the entire workflow.
+  </p>
+
+  <h2>Evolved Architecture: Introducing Modular Services</h2>
+  <p>
+    I envisioned Lodi refactored into three core services:
+  </p>
+  <ul>
+    <li><strong>Search Worker:</strong> Uses ChatGPT and SerpAPI to perform search queries</li>
+    <li><strong>Processing Worker:</strong> Cleans and transforms data</li>
+    <li><strong>Output Writer:</strong> Writes the final data to Google Sheets</li>
+  </ul>
+  <p>
+    In this design, each service runs independently, communicating via APIs or task queues.
+  </p>
+
+  <img src="assets/lodi_refactored_architecture.png" alt="Refactored architecture diagram (placeholder)">
+
+  <p>
+    Now, <strong>each service is its own quantum</strong>: I could deploy or update them separately.
+  </p>
+
+  <h3>Benefits of splitting it up:</h3>
+  <ul>
+    <li>✅ Easier to test and deploy individual services</li>
+    <li>✅ Failures isolated to specific components</li>
+    <li>✅ Services could scale independently</li>
+  </ul>
+
+  <h3>But introduced tradeoffs:</h3>
+  <ul>
+    <li>⚠️ Needed coordination between services</li>
+    <li>⚠️ Added complexity in monitoring and integration</li>
+  </ul>
+
+  <h2>Future Evolution: Exploring Communication Models</h2>
+  <p>
+    As I explored how Lodi’s architecture could evolve beyond modular services, I encountered an important design question: How should the services communicate? Should each component call the next directly via an API, or pass messages asynchronously through a queue?
+  </p>
+
+  <p>
+    In an <strong>API-based design</strong>, each service would expose an HTTP endpoint, and the upstream component would make a direct call. For example, after the Search Worker completes a query, it would send an API request to the Processing Worker. The Processing Worker would then call the Output Writer API to submit cleaned results for storage in Google Sheets. This design favors real-time, request-response communication.
+  </p>
+
+  <p>
+    In a <strong>message queue-based design</strong>, each service would operate as an asynchronous worker, publishing or consuming messages from queues. The Search Worker would publish search results to a queue; the Processing Worker would subscribe to that queue, process the data, and publish cleaned results to another queue; and the Output Writer would subscribe to the cleaned data queue to write into Google Sheets. This design decouples services and allows them to run independently.
+  </p>
+
+  <h2>API vs Message Queue: Comparing Tradeoffs</h2>
+
+  <table>
+    <tr>
+      <th>Aspect</th>
+      <th>API Calls (Synchronous)</th>
+      <th>Message Queue (Asynchronous)</th>
+    </tr>
+    <tr>
+      <td>Coupling</td>
+      <td>Tightly coupled</td>
+      <td>Loosely coupled</td>
+    </tr>
+    <tr>
+      <td>Latency</td>
+      <td>Immediate response</td>
+      <td>May process later</td>
+    </tr>
+    <tr>
+      <td>Resilience</td>
+      <td>Dependent on receiver uptime</td>
+      <td>Receiver can fail and recover independently</td>
+    </tr>
+    <tr>
+      <td>Complexity</td>
+      <td>Simpler setup</td>
+      <td>Requires queue management</td>
+    </tr>
+    <tr>
+      <td>Scaling</td>
+      <td>Client and server scale together</td>
+      <td>Consumers scale independently</td>
+    </tr>
+  </table>
+
+  <p>
+    An API approach provides simplicity, immediate communication, and fewer moving parts. It’s ideal for lightweight tools or workflows where real-time results matter.
+  </p>
+
+  <p>
+    Rather than choosing one path outright, I saw this decision as a classic architectural tradeoff: balancing simplicity, resilience, and scalability depending on context and goals.
+  </p>
+
+  <p>
+    <em>Which approach would you choose? How would you balance simplicity and resilience in a system like Lodi?</em>
+  </p>
+
+  <h2>Architectural Reflections</h2>
+  <p>
+    Working through Lodi’s evolution gave me a deeper appreciation for architectural tradeoffs. Starting as a monolith made sense early on for simplicity. But as features and complexity increased, it became clear that a single monolithic quantum couldn’t scale or adapt easily. The architecture naturally shifted from a single deployable quantum to multiple quanta, with each representing a decoupled, independently deployable part of the system.
+  </p>
+  <p>
+    This mirrors key ideas from <em>Software Architecture: The Hard Parts</em>. Architecture is about designing boundaries, and quantum decisions are never fixed -- they evolve as systems grow and needs change. This case study allowed me to explore firsthand how quanta evolve, moving from a single script to independent services and eventually to asynchronous workers. Shifting those boundaries enabled new ways to deploy, scale, and isolate failures.
+  </p>
+  <p>
+    Through Lodi, I practiced making these decisions in context, balancing simplicity, iteration speed, and operational complexity. These are skills I aim to bring to Solutions Architect roles.
+  </p>
+  
+
+  <footer>
+    <p>Built by Vincent Allen Jr — <a href="index.html">Back to Portfolio</a></p>
+  </footer>
+
+</body>
+</html>
